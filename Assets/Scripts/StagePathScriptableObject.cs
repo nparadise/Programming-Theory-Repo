@@ -34,3 +34,39 @@ public class StagePathScriptableObject : ScriptableObject
     }
 }
 
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(StagePathScriptableObject))]
+public class StagePathScriptableObjectEditor : Editor
+{
+    private void OnEnable()
+    {
+        SceneView.duringSceneGui += OnSceneGUI;
+    }
+
+    private void OnDisable()
+    {
+        SceneView.duringSceneGui -= OnSceneGUI;
+    }
+
+    private void OnSceneGUI(SceneView sceneView)
+    {
+        var obj = target as StagePathScriptableObject;
+        if (!obj) return;
+
+        for (var i = 0; i < obj.pathPoints.Length; i++)
+        {
+            var point = obj.pathPoints[i];
+            EditorGUI.BeginChangeCheck();
+            var newPosition = Handles.PositionHandle(point, quaternion.identity);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(obj, "Change path point position");
+                obj.pathPoints[i] = newPosition;
+            }
+        }
+    }
+}
+
+#endif
+

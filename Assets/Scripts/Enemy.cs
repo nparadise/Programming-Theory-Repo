@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected int reward = 1;
     [SerializeField] protected float health = 100f;
     
-    [SerializeField] private List<Vector3> targets;
+    [SerializeField] private StagePathScriptableObject path;
     private int _currentTargetPositionIndex = 0;
     
     private void Update()
@@ -20,14 +20,23 @@ public class Enemy : MonoBehaviour
     protected virtual void Move()
     {
         var currentPosition = transform.position;
-        if (Vector3.Distance(currentPosition, targets[_currentTargetPositionIndex]) < Vector3.kEpsilon && _currentTargetPositionIndex != targets.Count)
+        // TODO: move path of the stage to the separate GameManager script 
+        if (Vector3.Distance(currentPosition, path.pathPoints[_currentTargetPositionIndex]) < Vector3.kEpsilon && _currentTargetPositionIndex != path.pathPoints.Length)
         {
             _currentTargetPositionIndex += 1;
         }
         
-        var targetPosition = targets[_currentTargetPositionIndex];
+        var targetPosition = path.pathPoints[_currentTargetPositionIndex];
         var direction = (targetPosition - currentPosition).normalized;
         transform.Rotate(Quaternion.FromToRotation(transform.right, direction).eulerAngles);
+        
         transform.Translate(Time.deltaTime * speed * direction, Space.World);
     }
+    
+    public float GetRemainingDistance()
+    {
+        return path.RemainingDistance(_currentTargetPositionIndex, transform.position);
+    }
 }
+
+

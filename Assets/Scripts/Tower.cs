@@ -12,11 +12,13 @@ public class Tower : MonoBehaviour
     [SerializeField] protected float enemyDetectRadius = 2f;
     private bool isShootable = true;
 
-    private Enemy _targetEnemy;
-    [SerializeField] private Transform headCenter;
-
     private HashSet<Enemy> _enemiesInRange;
+    private Enemy _targetEnemy;
 
+    [SerializeField] private Transform headCenter;
+    [SerializeField] private Transform muzzle;
+    [SerializeField] private Bullet bulletPrefab;
+    
     private void Awake()
     {
         _enemiesInRange = new HashSet<Enemy>();
@@ -98,9 +100,12 @@ public class Tower : MonoBehaviour
     
     private void Shoot()
     {
-        Debug.Log("Shoot");
+        // Debug.Log("Shoot");
         Debug.DrawLine(transform.position, _targetEnemy.transform.position, Color.red, 1f);
 
+        var spawnedBullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
+        spawnedBullet.TargetEnemy = _targetEnemy;
+        
         isShootable = false;
         StartCoroutine(ShootDelay());
     }

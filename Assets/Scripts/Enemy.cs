@@ -12,8 +12,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private StagePathScriptableObject path;
     private int _currentTargetPositionIndex = 0;
 
-    private float _arriveEpsilon = 0.01f;
-    
+    private const float ArriveEpsilon = 0.01f;
+
     private void Update()
     {
         Move();
@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
     {
         var currentPosition = transform.position;
         // TODO: move path of the stage to the separate GameManager script 
-        if (Vector3.Distance(currentPosition, path.pathPoints[_currentTargetPositionIndex]) < _arriveEpsilon && _currentTargetPositionIndex != path.pathPoints.Length)
+        if (Vector3.Distance(currentPosition, path.pathPoints[_currentTargetPositionIndex]) < ArriveEpsilon && _currentTargetPositionIndex != path.pathPoints.Length)
         {
             _currentTargetPositionIndex += 1;
         }

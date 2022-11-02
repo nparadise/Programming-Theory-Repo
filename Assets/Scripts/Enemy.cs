@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] protected float speed = 1f;
     [SerializeField] protected int reward = 1;
-    [SerializeField] protected float health = 100f;
+    [SerializeField] protected float currentHealth = 100f;
     
     [SerializeField] private StagePathScriptableObject path;
     private int _currentTargetPositionIndex = 0;
@@ -38,6 +38,21 @@ public class Enemy : MonoBehaviour
     public float GetRemainingDistance()
     {
         return path.RemainingDistance(_currentTargetPositionIndex, transform.position);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        // Debug.Log($"Health: {currentHealth}");
+        if (currentHealth <= 0f)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }
 

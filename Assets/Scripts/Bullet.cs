@@ -61,7 +61,8 @@ public class Bullet : MonoBehaviour
         if (!_targetEnemy) return;
         if (other.gameObject == _targetEnemy.gameObject)
         {
-            Debug.Log("Hit Target Enemy");
+            // Debug.Log("Hit Target Enemy");
+            _targetEnemy.TakeDamage(damage);
             Destroy(gameObject);
         }
     }

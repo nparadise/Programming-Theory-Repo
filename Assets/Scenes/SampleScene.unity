@@ -2653,7 +2653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   reward: 1
-  health: 100
+  currentHealth: 100
   path: {fileID: 11400000, guid: 6801b3589949fe94fac53f1aedee7706, type: 2}
 --- !u!61 &2021405490
 BoxCollider2D:

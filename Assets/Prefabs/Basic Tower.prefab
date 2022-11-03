@@ -165,7 +165,10 @@ MonoBehaviour:
   rotationSpeed: 60
   shootDelay: 0.5
   enemyDetectRadius: 2
+  data: {fileID: 11400000, guid: 0b3ed02071928ff49853a78079214756, type: 2}
   headCenter: {fileID: 1161543307420053428}
+  muzzle: {fileID: 1450979731}
+  bulletPrefab: {fileID: 3689568144496930797, guid: 284a2c61b07e9fa4783d6103f804ff6b, type: 3}
 --- !u!58 &1899903654423126996
 CircleCollider2D:
   m_ObjectHideFlags: 0

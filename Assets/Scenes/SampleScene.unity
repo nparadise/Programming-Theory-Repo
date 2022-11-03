@@ -2651,9 +2651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80863bc499b28de439741daaad79ac21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  reward: 1
-  currentHealth: 100
+  data: {fileID: 11400000, guid: d92605c5f025ecc46a805639ad42f496, type: 2}
   path: {fileID: 11400000, guid: 6801b3589949fe94fac53f1aedee7706, type: 2}
 --- !u!61 &2021405490
 BoxCollider2D:

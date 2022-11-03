@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7092dbd4ccc0191408384667be7bfbc1, type: 3}
-  m_Name: Basic Enemy
+  m_Script: {fileID: 11500000, guid: 7789b39a462705b41ae2810d9fa139a4, type: 3}
+  m_Name: Basic Tower
   m_EditorClassIdentifier: 
-  speed: 1
-  maxHealth: 50
-  reward: 10
+  rotationSpeed: 60
+  shootDelay: 0.5
+  enemyDetectRadius: 2

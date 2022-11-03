@@ -7,29 +7,26 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Tower : MonoBehaviour
 {
-    [SerializeField, Tooltip("Max Rotation(in degrees) per Second")] protected float rotationSpeed = 60f;
-    [SerializeField] protected float shootDelay = .5f;
-    [SerializeField] protected float enemyDetectRadius = 2f;
-    private bool isShootable = true;
+    [SerializeField] protected TowerData data;
+    private bool _isShootable = true;
 
     private HashSet<Enemy> _enemiesInRange;
     private Enemy _targetEnemy;
 
     [SerializeField] private Transform headCenter;
     [SerializeField] private Transform muzzle;
-    [SerializeField] private Bullet bulletPrefab;
     
     private void Awake()
     {
         _enemiesInRange = new HashSet<Enemy>();
-        GetComponent<CircleCollider2D>().radius = enemyDetectRadius;
+        GetComponent<CircleCollider2D>().radius = data.EnemyDetectRadius;
     }
 
     private void Update()
     {
         FindTarget();
         LookTarget();
-        if (isShootable && CheckCanShootTarget())
+        if (_isShootable && CheckCanShootTarget())
         {
             Shoot();
         }
@@ -82,7 +79,7 @@ public class Tower : MonoBehaviour
         
         var isCCW = remainingAngle < 180f;
         remainingAngle = isCCW ? remainingAngle : 360f - remainingAngle;
-        var angleToRotate = rotationSpeed * Time.deltaTime;
+        var angleToRotate = data.RotationSpeed * Time.deltaTime;
         angleToRotate = angleToRotate > remainingAngle ? remainingAngle : angleToRotate;
         headTransform.Rotate(0,0, isCCW ? angleToRotate : -angleToRotate);
     }
@@ -103,16 +100,16 @@ public class Tower : MonoBehaviour
         // Debug.Log("Shoot");
         Debug.DrawLine(transform.position, _targetEnemy.transform.position, Color.red, 1f);
 
-        var spawnedBullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
+        var spawnedBullet = Instantiate(data.BulletPrefab, muzzle.position, Quaternion.identity);
         spawnedBullet.TargetEnemy = _targetEnemy;
         
-        isShootable = false;
+        _isShootable = false;
         StartCoroutine(ShootDelay());
     }
 
     private IEnumerator ShootDelay()
     {
-        yield return new WaitForSeconds(shootDelay);
-        isShootable = true;
+        yield return new WaitForSeconds(data.ShootDelay);
+        _isShootable = true;
     }
 }

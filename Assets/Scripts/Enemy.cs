@@ -5,14 +5,23 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] protected float speed = 1f;
-    [SerializeField] protected int reward = 1;
-    [SerializeField] protected float currentHealth = 100f;
+    protected float CurrentHealth;
+    [SerializeField] protected EnemyData data;
     
     [SerializeField] private StagePathScriptableObject path;
     private int _currentTargetPositionIndex = 0;
 
     private const float ArriveEpsilon = 0.01f;
+
+    private void Awake()
+    {
+        if (!data)
+        {
+            Debug.LogError("Cannot find data scriptable object");
+        }
+
+        CurrentHealth = data.MaxHealth;
+    }
 
     private void Update()
     {
@@ -32,7 +41,7 @@ public class Enemy : MonoBehaviour
         var direction = (targetPosition - currentPosition).normalized;
         transform.Rotate(Quaternion.FromToRotation(transform.right, direction).eulerAngles);
         
-        transform.Translate(Time.deltaTime * speed * direction, Space.World);
+        transform.Translate(Time.deltaTime * data.Speed * direction, Space.World);
     }
     
     public float GetRemainingDistance()
@@ -42,9 +51,9 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
+        CurrentHealth -= damage;
         // Debug.Log($"Health: {currentHealth}");
-        if (currentHealth <= 0f)
+        if (CurrentHealth <= 0f)
         {
             Die();
         }

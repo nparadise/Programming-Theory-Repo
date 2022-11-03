@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/StagePathScriptableObject")]
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/StagePathScriptableObject", order = 1)]
 public class StagePathScriptableObject : ScriptableObject
 {
     public Vector3[] pathPoints;

@@ -8,52 +8,55 @@ public class Bullet : MonoBehaviour
     private bool isTargetAssigned = false;
     
     private Enemy _targetEnemy;
-    public Enemy TargetEnemy
-    {
-        set
-        {
-            if (isTargetAssigned) return;
-            _targetEnemy = value;
-            isTargetAssigned = true;
-        } 
-    }
-
     private Vector3 _targetPosition;
-    public Vector3 TargetPosition
-    {
-        set
-        {
-            if (isTargetAssigned) return;
-            _targetPosition = value;
-            isTargetAssigned = true;
-        }
-    }
 
     [SerializeField] private float speed = 1.5f;
     [SerializeField] private float damage = 10f;
 
-    private void Update()
+    public void SetTarget(Enemy target)
     {
-        if (!isTargetAssigned) return;
-        
+        if (isTargetAssigned) return;
+        isTargetAssigned = true;
+        _targetEnemy = target;
+    }
+
+    public void SetTarget(Vector3 target)
+    {
+        if (isTargetAssigned) return;
+        isTargetAssigned = true;
+        _targetPosition = target;
+    }
+    
+    public void HitTarget()
+    {
         if (_targetEnemy)
         {
-            HitTarget();
+            StartCoroutine(nameof(FollowEnemy));
         }
         else
         {
-            HitPosition();
-        }
+            StartCoroutine(nameof(HitPosition));
+        }        
     }
     
-    private void HitTarget()
+    private IEnumerator FollowEnemy()
     {
-        transform.Translate(speed * Time.deltaTime * (_targetEnemy.transform.position - transform.position).normalized);
+        while (_targetEnemy)
+        {
+            transform.Translate(speed * Time.deltaTime * (_targetEnemy.transform.position - transform.position).normalized);
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 
-    private void HitPosition()
+    private IEnumerator HitPosition()
     {
-        transform.Translate(speed * Time.deltaTime * (_targetPosition - transform.position).normalized);
+        while (gameObject)
+        {
+            transform.Translate(speed * Time.deltaTime * (_targetPosition - transform.position).normalized);
+            yield return null;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

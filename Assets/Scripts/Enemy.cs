@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    protected float CurrentHealth;
     [SerializeField] protected EnemyData data;
+    protected float CurrentHealth;
+
+    public bool _isDead;
+    // public bool IsDead => _isDead;
     
     [SerializeField] private StagePathScriptableObject path;
     private int _currentTargetPositionIndex = 0;
@@ -21,11 +24,17 @@ public class Enemy : MonoBehaviour
         }
 
         CurrentHealth = data.MaxHealth;
+        _isDead = false;
     }
 
     private void Update()
     {
         Move();
+    }
+
+    private void OnDestroy()
+    {
+        // Debug.Log($"This Game Object({gameObject.name}) is destroyed. IsDead: {_isDead}");
     }
 
     protected virtual void Move()
@@ -61,6 +70,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        _isDead = true;
         Destroy(gameObject);
     }
 }

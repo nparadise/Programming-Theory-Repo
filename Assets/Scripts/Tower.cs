@@ -98,11 +98,12 @@ public class Tower : MonoBehaviour
     private void Shoot()
     {
         // Debug.Log("Shoot");
-        Debug.DrawLine(transform.position, _targetEnemy.transform.position, Color.red, 1f);
+        // Debug.DrawLine(transform.position, _targetEnemy.transform.position, Color.red, 1f);
 
         var spawnedBullet = Instantiate(data.BulletPrefab, muzzle.position, Quaternion.identity);
-        spawnedBullet.TargetEnemy = _targetEnemy;
-        
+        spawnedBullet.SetTarget(_targetEnemy);
+        spawnedBullet.HitTarget();
+
         _isShootable = false;
         StartCoroutine(ShootDelay());
     }

@@ -5,68 +5,49 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private bool isTargetAssigned = false;
+    protected bool IsTargetSet = false;
+    protected Enemy TargetEnemy;
     
-    private Enemy _targetEnemy;
-    private Vector3 _targetPosition;
-
-    [SerializeField] private float speed = 1.5f;
-    [SerializeField] private float damage = 10f;
+    [SerializeField] protected float speed = 1.5f;
+    [SerializeField] protected float damage = 10f;
 
     public void SetTarget(Enemy target)
     {
-        if (isTargetAssigned) return;
-        isTargetAssigned = true;
-        _targetEnemy = target;
-    }
-
-    public void SetTarget(Vector3 target)
-    {
-        if (isTargetAssigned) return;
-        isTargetAssigned = true;
-        _targetPosition = target;
+        if (IsTargetSet) return;
+        IsTargetSet = true;
+        TargetEnemy = target;
     }
     
-    public void HitTarget()
+    public virtual void HitTarget()
     {
-        if (_targetEnemy)
-        {
-            StartCoroutine(nameof(FollowEnemy));
-        }
-        else
-        {
-            StartCoroutine(nameof(HitPosition));
-        }        
+        StartCoroutine(FollowEnemy());
     }
     
     private IEnumerator FollowEnemy()
     {
-        while (_targetEnemy)
+        while (TargetEnemy)
         {
-            transform.Translate(speed * Time.deltaTime * (_targetEnemy.transform.position - transform.position).normalized);
+            var dir = (TargetEnemy.transform.position - transform.position).normalized;
+            transform.Rotate(Quaternion.FromToRotation(transform.right, dir).eulerAngles);
+            transform.Translate(speed * Time.deltaTime * dir, Space.World);
             yield return null;
         }
-
         Destroy(gameObject);
-    }
-
-    private IEnumerator HitPosition()
-    {
-        while (gameObject)
-        {
-            transform.Translate(speed * Time.deltaTime * (_targetPosition - transform.position).normalized);
-            yield return null;
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!_targetEnemy) return;
-        if (other.gameObject == _targetEnemy.gameObject)
+        if (!IsTargetSet) return;
+        if (other.gameObject == TargetEnemy.gameObject)
         {
             // Debug.Log("Hit Target Enemy");
-            _targetEnemy.TakeDamage(damage);
+            OnHitTarget(TargetEnemy);
             Destroy(gameObject);
         }
+    }
+
+    protected virtual void OnHitTarget(Enemy firstHit)
+    {
+        firstHit.TakeDamage(damage);
     }
 }

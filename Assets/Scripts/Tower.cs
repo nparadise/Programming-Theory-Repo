@@ -8,27 +8,34 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [SerializeField] protected TowerData data;
-    private bool _isShootable = true;
+    protected bool IsShootable = true;
 
     private HashSet<Enemy> _enemiesInRange;
-    private Enemy _targetEnemy;
+    protected Enemy _targetEnemy;
 
-    [SerializeField] private Transform headCenter;
-    [SerializeField] private Transform muzzle;
+    [SerializeField] protected Transform headCenter;
+    [SerializeField] protected Transform muzzle;
     
     private void Awake()
     {
         _enemiesInRange = new HashSet<Enemy>();
-        GetComponent<CircleCollider2D>().radius = data.EnemyDetectRadius;
+        var cir = GetComponent<CircleCollider2D>();
+        cir.radius = data.EnemyDetectRadius;
     }
 
     private void Update()
     {
         FindTarget();
         LookTarget();
-        if (_isShootable && CheckCanShootTarget())
+        if (IsShootable && CheckCanShootTarget())
         {
             Shoot();
+
+            if (data.ShootDelay > Single.Epsilon)
+            {
+                IsShootable = false;
+                StartCoroutine(ShootDelay());
+            }
         }
     }
 
@@ -95,22 +102,19 @@ public class Tower : MonoBehaviour
         return angle < 2f;
     }
     
-    private void Shoot()
+    protected virtual void Shoot()
     {
         // Debug.Log("Shoot");
         // Debug.DrawLine(transform.position, _targetEnemy.transform.position, Color.red, 1f);
 
-        var spawnedBullet = Instantiate(data.BulletPrefab, muzzle.position, Quaternion.identity);
+        var spawnedBullet = Instantiate(data.BulletPrefab, muzzle.position, headCenter.rotation);
         spawnedBullet.SetTarget(_targetEnemy);
-        spawnedBullet.HitTarget();
-
-        _isShootable = false;
-        StartCoroutine(ShootDelay());
+        spawnedBullet.HitTarget();        
     }
 
     private IEnumerator ShootDelay()
     {
         yield return new WaitForSeconds(data.ShootDelay);
-        _isShootable = true;
+        IsShootable = true;
     }
 }

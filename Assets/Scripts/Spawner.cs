@@ -11,6 +11,8 @@ public class Spawner : MonoBehaviour
     private float _spawnNumber;
     private float _spawnDelay;
 
+    private Player _player;
+    
     private WaitForSeconds _wait;
     
     private void Start()
@@ -19,6 +21,8 @@ public class Spawner : MonoBehaviour
         _spawnNumber = 10;
         _spawnDelay = 0.5f;
         _wait = new WaitForSeconds(_spawnDelay);
+
+        _player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     private IEnumerator Spawn()
@@ -26,7 +30,8 @@ public class Spawner : MonoBehaviour
         for (var i = 0; i < _spawnNumber; i++)
         {
             var tf = transform;
-            Instantiate(enemyPrefabs[_enemyToSpawn], tf.position, tf.rotation);
+            var enemy = Instantiate(enemyPrefabs[_enemyToSpawn], tf.position, tf.rotation);
+            enemy.onAddPoint = _player.onAddPoint;
             yield return _wait;
         }
     }

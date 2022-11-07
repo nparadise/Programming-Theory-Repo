@@ -7,13 +7,15 @@ public class TowerPlacement : MonoBehaviour
 {
     [SerializeField] private Grid _grid;
 
-    [SerializeField] private Tower _tower;
+    [SerializeField] private Tower _towerPrefab;
 
     private Camera _camera;
+    private Player _player;
     
     private void Start()
     {
         _camera = Camera.main;
+        _player = GetComponent<Player>();
     }
     
     private void Update()
@@ -30,7 +32,7 @@ public class TowerPlacement : MonoBehaviour
     private bool CanPlaceTower(Vector3Int cellPos)
     {
         var hitAll = Physics2D.GetRayIntersectionAll(_camera.ScreenPointToRay(Input.mousePosition));
-        if (hitAll.Length == 0) return false;
+        // if (hitAll.Length == 0) return false;
 
         foreach(var hit in hitAll)
         {
@@ -56,6 +58,6 @@ public class TowerPlacement : MonoBehaviour
     private void PlaceTower(Vector3Int cellPos)
     {
         var towerPos = _grid.GetCellCenterWorld(cellPos);
-        Instantiate(_tower, towerPos, Quaternion.identity);
+        Instantiate(_towerPrefab, towerPos, Quaternion.identity);
     }
 }

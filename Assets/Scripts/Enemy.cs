@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
 
     private const float ArriveEpsilon = 0.01f;
 
+    public IntEvent onAddPoint;
+
     private void Awake()
     {
         if (!data)
@@ -71,6 +73,7 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         _isDead = true;
+        onAddPoint.Invoke(data.Reward);
         Destroy(gameObject);
     }
 }

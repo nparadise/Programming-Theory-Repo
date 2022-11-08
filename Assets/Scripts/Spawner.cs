@@ -39,6 +39,7 @@ public class Spawner : MonoBehaviour
         _spawnCoroutine = null;
     }
 
+    // ABSTRACTION
     public void StartSpawn()
     {
         if (_spawnCoroutine != null) return;

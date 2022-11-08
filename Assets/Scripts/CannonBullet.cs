@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// INHERITANCE
 public class CannonBullet : Bullet
 {
     [SerializeField] private float _explosionRadius = 1f;
-    
+
+    // POLYMORPHISM
     protected override void OnHitTarget(Enemy firstHit)
     {
         base.OnHitTarget(firstHit);

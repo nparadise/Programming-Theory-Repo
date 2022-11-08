@@ -2,23 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
-{
-    public static StageManager Instance = null;
-    
+{    
     [SerializeField] private StagePathScriptableObject _stagePath;
     [SerializeField] private Spawner spawner;
+    private UIManager _uiManager;
 
-    private void Awake()
+    private void Start()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-        }
-        Instance = this;
-        
-        DontDestroyOnLoad(gameObject);
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     private void Update()
@@ -37,6 +31,14 @@ public class StageManager : MonoBehaviour
 
     public void EndStage()
     {
+        Time.timeScale = 0;
         spawner.StopSpawn();
+        _uiManager.ShowGameOverUI();
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
     }
 }

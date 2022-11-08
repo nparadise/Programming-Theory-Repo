@@ -47,7 +47,10 @@ public class Spawner : MonoBehaviour
 
     public void StopSpawn()
     {
-        StopCoroutine(_spawnCoroutine);
+        if (_spawnCoroutine != null)
+        {
+            StopCoroutine(_spawnCoroutine);
+        }
         _spawnCoroutine = null;
     }
 }

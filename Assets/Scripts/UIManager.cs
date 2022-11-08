@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     
     [SerializeField] private TowerPlacementUI _towerPlacementUI;
     private TowerPlacement _towerPlacement;
+
+    [SerializeField] private GameObject gameOverUI;
     
     private TextMeshProUGUI _pointText;
     
@@ -48,5 +50,10 @@ public class UIManager : MonoBehaviour
             return;
         }
         _towerPlacementUI.Show(mousePositionInCanvas, _rectTransform);
+    }
+
+    public void ShowGameOverUI()
+    {
+        gameOverUI.SetActive(true);
     }
 }

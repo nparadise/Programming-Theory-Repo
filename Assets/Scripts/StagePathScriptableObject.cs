@@ -32,6 +32,8 @@ public class StagePathScriptableObject : ScriptableObject
 
     public float RemainingDistance(int nextPoint, Vector3 currentPosition)
     {
+        if (nextPoint >= _distanceToEnd.Count) return 0;
+        
         var rem = _distanceToEnd[nextPoint];
         rem += Vector3.Distance(currentPosition, pathPoints[nextPoint]);
         return rem;

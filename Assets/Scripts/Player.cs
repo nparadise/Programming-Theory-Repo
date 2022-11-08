@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[System.Serializable]
-public class IntEvent : UnityEvent<int>
-{
-}
+[Serializable]
+public class IntEvent : UnityEvent<int> {}
 
 public class Player : MonoBehaviour
 {
-    private UIManager _ui;
+    private UIManager _uiManager;
 
     public IntEvent onAddPoint;
 
@@ -19,8 +17,8 @@ public class Player : MonoBehaviour
     
     private void Start()
     {
-        _ui = GameObject.Find("Canvas").GetComponent<UIManager>();
-        if (!_ui) { Debug.Log("UI Manager is Null"); }
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (!_uiManager) { Debug.Log("UI Manager is Null"); }
 
         onAddPoint ??= new IntEvent();
         onAddPoint.AddListener(AddPoint);
@@ -33,15 +31,29 @@ public class Player : MonoBehaviour
 
     private void AddPoint(int add)
     {
+        if (add < 0)
+        {
+            Debug.LogError("Negative value is not allowed. Use \"UsePoint(int)\" method.");
+            return;
+        }
         _point += add;
-        _ui.UpdatePoint(_point);
+        _uiManager.UpdatePoint(_point);
     }
 
     public bool UsePoint(int use)
     {
-        if (use > _point) return false;
+        if (use < 0)
+        {
+            Debug.LogError("The parameter must be positive value");
+            return false;
+        }
+        
+        if (use > _point)
+        {
+            return false;
+        }
         _point -= use;
-        _ui.UpdatePoint(_point);
+        _uiManager.UpdatePoint(_point);
         return true;
     }
 }

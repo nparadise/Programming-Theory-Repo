@@ -3,37 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public enum TowerType
+{
+    Basic,
+    Cannon,
+    Slow,
+    Chain,
+    Count
+}
+
 public class TowerPlacement : MonoBehaviour
 {
     [SerializeField] private Grid _grid;
 
-    [SerializeField] private Tower _towerPrefab;
+    [SerializeField] private Tower[] _towerPrefabs;
 
     private Camera _camera;
     private Player _player;
+    private UIManager _uiManager;
+
+    private Vector3Int _positionToPlaceTower;
     
     private void Start()
     {
         _camera = Camera.main;
         _player = GetComponent<Player>();
-    }
-    
-    private void Update()
-    {
-        // When click right mouse button
-        if (Input.GetMouseButtonDown(1))
-        {
-            var mousePos = _camera.ScreenToWorldPoint(Input.mousePosition);
-            var cellPos = _grid.WorldToCell(mousePos);
-            if (CanPlaceTower(cellPos)) PlaceTower(cellPos);
-        }
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
-    private bool CanPlaceTower(Vector3Int cellPos)
+    /// <summary>
+    /// Checks that the tower can be placed in given position.
+    /// </summary>
+    /// <param name="position2Check"> Position to check. </param>
+    /// <returns> True if the tower can be placed. False if not. </returns>
+    public bool CanPlaceTower(Vector3 position2Check)
     {
-        var hitAll = Physics2D.GetRayIntersectionAll(_camera.ScreenPointToRay(Input.mousePosition));
-        // if (hitAll.Length == 0) return false;
-
+        var hitAll = Physics2D.GetRayIntersectionAll(new Ray(position2Check, Vector3.forward));
+        var cellPos = _grid.WorldToCell(position2Check);
+        
         foreach(var hit in hitAll)
         {
             var hitTr = hit.transform;
@@ -44,7 +52,6 @@ public class TowerPlacement : MonoBehaviour
             if (hitTr.CompareTag("Tower"))
             {
                 var hitTowerPos = _grid.WorldToCell(hitTr.position);
-                Debug.Log($"Hit: {hitTr.name}, HitTowerPosition: {hitTowerPos}\nPosition2Place: {cellPos}");
                 if (hitTowerPos == cellPos)
                 {
                     return false;
@@ -52,12 +59,19 @@ public class TowerPlacement : MonoBehaviour
             }
         }
 
+        _positionToPlaceTower = cellPos;
         return true;
     }
     
-    private void PlaceTower(Vector3Int cellPos)
+    
+    /// <summary>
+    /// Place the tower with selected type of tower.
+    /// </summary>
+    /// <param name="type">Tower to be installed.</param>
+    public void PlaceTower(TowerType type = TowerType.Basic)
     {
-        var towerPos = _grid.GetCellCenterWorld(cellPos);
-        Instantiate(_towerPrefab, towerPos, Quaternion.identity);
+        var towerPos = _grid.GetCellCenterWorld(_positionToPlaceTower);
+        // TODO: Check whether the tower is affordable. If affordable, use point and create tower, and if not, return. 
+        Instantiate(_towerPrefabs[(int)type], towerPos, Quaternion.identity);
     }
 }

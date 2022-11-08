@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   maxHealth: 50
-  reward: 10
+  reward: 1

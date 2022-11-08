@@ -16,3 +16,4 @@ MonoBehaviour:
   shootDelay: 0.5
   enemyDetectRadius: 2
   bulletPrefab: {fileID: 3689568144496930797, guid: 284a2c61b07e9fa4783d6103f804ff6b, type: 3}
+  cost: 10

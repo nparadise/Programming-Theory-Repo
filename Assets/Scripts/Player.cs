@@ -13,13 +13,14 @@ public class Player : MonoBehaviour
 
     public IntEvent onAddPoint;
 
-    private int _point = 0;
+    private int _point = 20;
     
     private void Start()
     {
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (!_uiManager) { Debug.Log("UI Manager is Null"); }
-
+        _uiManager.UpdatePoint(_point);
+        
         onAddPoint ??= new IntEvent();
         onAddPoint.AddListener(AddPoint);
     }

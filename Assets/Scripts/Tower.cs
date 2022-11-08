@@ -8,6 +8,7 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [SerializeField] protected TowerData data;
+    public int Cost => data.Cost;
     protected bool IsShootable = true;
 
     private HashSet<Enemy> _enemiesInRange;

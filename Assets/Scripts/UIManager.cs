@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
     public void UpdatePoint(int point)
     {
         if (!_pointText) return;
-        _pointText.text = $"Score: {point}";
+        _pointText.text = $"Point: {point}";
     }
 
     public void ShowTowerPlacementMenu()

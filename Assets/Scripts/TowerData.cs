@@ -17,4 +17,7 @@ public class TowerData : ScriptableObject
 
     [SerializeField] private Bullet bulletPrefab;
     public Bullet BulletPrefab => bulletPrefab;
+
+    [SerializeField] private int cost;
+    public int Cost => cost;
 }

@@ -9,7 +9,6 @@ public class Enemy : MonoBehaviour
     protected float CurrentHealth;
 
     public bool _isDead;
-    // public bool IsDead => _isDead;
     
     [SerializeField] private StagePathScriptableObject path;
     private int _currentTargetPositionIndex = 0;
@@ -32,11 +31,6 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         Move();
-    }
-
-    private void OnDestroy()
-    {
-        // Debug.Log($"This Game Object({gameObject.name}) is destroyed. IsDead: {_isDead}");
     }
 
     protected virtual void Move()
@@ -63,7 +57,6 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         CurrentHealth -= damage;
-        // Debug.Log($"Health: {currentHealth}");
         if (CurrentHealth <= 0f)
         {
             Die();

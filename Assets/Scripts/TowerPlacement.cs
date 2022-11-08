@@ -71,7 +71,12 @@ public class TowerPlacement : MonoBehaviour
     public void PlaceTower(TowerType type = TowerType.Basic)
     {
         var towerPos = _grid.GetCellCenterWorld(_positionToPlaceTower);
-        // TODO: Check whether the tower is affordable. If affordable, use point and create tower, and if not, return. 
+        // Check whether the tower is affordable. If affordable, use point and create tower, and if not, return. 
+        if (!_player.UsePoint(_towerPrefabs[(int)type].Cost))
+        {
+            // TODO: Shows Not Enough Point Message UI.
+            return;
+        }
         Instantiate(_towerPrefabs[(int)type], towerPos, Quaternion.identity);
     }
 }

@@ -14,6 +14,7 @@ public class Spawner : MonoBehaviour
     private Player _player;
     
     private WaitForSeconds _wait;
+    private Coroutine _spawnCoroutine = null;
     
     private void Start()
     {
@@ -34,10 +35,19 @@ public class Spawner : MonoBehaviour
             enemy.onAddPoint = _player.onAddPoint;
             yield return _wait;
         }
+
+        _spawnCoroutine = null;
     }
 
     public void StartSpawn()
     {
-        StartCoroutine(nameof(Spawn));
+        if (_spawnCoroutine != null) return;
+        _spawnCoroutine = StartCoroutine(nameof(Spawn));
+    }
+
+    public void StopSpawn()
+    {
+        StopCoroutine(_spawnCoroutine);
+        _spawnCoroutine = null;
     }
 }

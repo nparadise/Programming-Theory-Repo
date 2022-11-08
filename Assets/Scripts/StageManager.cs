@@ -37,6 +37,6 @@ public class StageManager : MonoBehaviour
 
     public void EndStage()
     {
-        
+        spawner.StopSpawn();
     }
 }
